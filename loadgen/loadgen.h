@@ -29,7 +29,7 @@ class SystemUnderTest;
 struct TestSettings;
 struct LogSettings;
 
-using ResponseCallback = std::function<void(QuerySampleResponse*)>;
+using ResponseCallback = std::function<void(QuerySampleResponse*, uint8_t*)>;
 
 /// \addtogroup LoadgenAPI Loadgen API
 /// @{
