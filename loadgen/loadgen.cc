@@ -88,12 +88,15 @@ struct ResponseDelegateDetailed : public ResponseDelegate {
       // host *after* calling it note that the callback is blocking and will
       // likely involve a memcpy from accelerator to host
       if (response_cb) {
-        response_cb(response);
+        sample_data_copy = new std::vector<uint8_t>(response->size);
+        response_cb(response, sample_data_copy->data());
       }
-      // TODO: Verify accuracy with the data copied here.
-      uint8_t* src_begin = reinterpret_cast<uint8_t*>(response->data);
-      uint8_t* src_end = src_begin + response->size;
-      sample_data_copy = new std::vector<uint8_t>(src_begin, src_end);
+      else {
+        // TODO: Verify accuracy with the data copied here.
+        uint8_t* src_begin = reinterpret_cast<uint8_t*>(response->data);
+        uint8_t* src_end = src_begin + response->size;
+        sample_data_copy = new std::vector<uint8_t>(src_begin, src_end);
+      }
     }
     Log([sample, complete_begin_time, sample_data_copy](AsyncLog& log) {
       QueryMetadata* query = sample->query_metadata;
